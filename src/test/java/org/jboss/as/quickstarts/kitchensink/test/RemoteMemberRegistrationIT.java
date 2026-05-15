@@ -143,7 +143,7 @@ public class RemoteMemberRegistrationIT {
                 .body("bad request")
                 .when().post("/rest/members")
                 .then()
-                    .statusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+                    .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
     }
 
     @Test
