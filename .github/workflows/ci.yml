@@ -19,5 +19,15 @@ jobs:
           java-version: 21
           distribution: temurin
           cache: maven
+      # Flyway runs src/main/resources/db/migration/*.js through mongosh.
+      # GitHub-hosted Ubuntu images do not include it.
+      - name: Install mongosh
+        run: |
+          wget -qO- https://www.mongodb.org/static/pgp/server-8.0.asc | sudo tee /etc/apt/trusted.gpg.d/server-8.0.asc
+          source /etc/os-release
+          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu ${VERSION_CODENAME}/mongodb-org/8.3 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.3.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-mongosh
+          mongosh --version
       - name: Build
         run: ./mvnw verify -B
